@@ -4,6 +4,7 @@ from handlers import (
     start,
     questionnaire,
     chat_actions,
+    registration
 )
 from database import db
 
@@ -19,6 +20,7 @@ start.register_start_handlers(dp=dp)
 questionnaire.register_questionnaire_handlers(dp=dp)
 questionnaire.continue_questionnaire_handlers(dp=dp)
 questionnaire.end_questionnaire_handlers(dp=dp)
+registration.register_registration_handlers(dp=dp)
 chat_actions.register_chat_actions_handlers(dp=dp)
 
 if __name__=="__main__":
