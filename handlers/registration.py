@@ -101,7 +101,7 @@ async def load_gender(message: types.Message,
     await bot.send_message(
         chat_id=message.from_user.id,
         text='Which year are you?\n'
-             'Example: year of the dog, rat, horse etc.''What is your gender?'
+             'Example: year of the dog, rat, horse etc.'
     )
     await RegistrationStates.next()
 

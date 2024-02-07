@@ -16,6 +16,8 @@ class Database:
         except sqlite3.OperationalError:
            pass
         self.connection.execute(sql_queries.CREATE_PROFILE_TABLE_QUERY)
+        self.connection.execute(sql_queries.CREATE_LIKE_TABLE_QUERY)
+        self.connection.execute(sql_queries.CREATE_DISLIKE_TABLE_QUERY)
         self.connection.commit()
 
     def sql_insert_user(self, tg_id, username, first_name, last_name):
@@ -55,3 +57,66 @@ class Database:
               (None, tg_id, nickname, bio, age, sign, gender, year, photo,)
          )
          self.connection.commit()
+    def sql_select_profile(self, tg_id):
+         self.cursor.row_factory = lambda cursor, row: {
+             'id': row[0],
+             'telegram_id': row[1],
+             'nickname': row[2],
+             'bio': row[3],
+             'age': row[4],
+             'sign': row[5],
+             'gender': row[6],
+             'year': row[7],
+             'photo': row[8],
+         }
+         return self.cursor.execute(
+            sql_queries.SELECT_PROFILE_QUERY,
+            (tg_id,)
+         ).fetchone()
+
+    def sql_insert_like(self, owner, liker):
+        self.cursor.execute(
+            sql_queries.INSERT_LIKE_QUERY,
+            (None, owner, liker,)
+        )
+        self.connection.commit()
+
+    def sql_insert_dislike(self, owner, disliker):
+        self.cursor.execute(
+            sql_queries.INSERT_DISLIKE_QUERY,
+            (None, owner, disliker,)
+        )
+        self.connection.commit()
+    def sql_select_all_profiles(self, owner):
+        self.cursor.row_factory = lambda cursor, row: {
+            'id': row[0],
+            'telegram_id': row[1],
+            'nickname': row[2],
+            'bio': row[3],
+            'age': row[4],
+            'sign': row[5],
+            'gender': row[6],
+            'year': row[7],
+            'photo': row[8],
+        }
+        return self.cursor.execute(
+            sql_queries.FILTER_LEFT_JOIN_PROFILE_QUERY,
+            (owner, owner,)
+        ).fetchall()
+
+    def sql_select_all_dis_profiles(self, owner):
+        self.cursor.row_factory = lambda cursor, row: {
+            'id': row[0],
+            'telegram_id': row[1],
+            'nickname': row[2],
+            'bio': row[3],
+            'age': row[4],
+            'sign': row[5],
+            'gender': row[6],
+            'year': row[7],
+            'photo': row[8],
+        }
+        return self.cursor.execute(
+            sql_queries.FILTER_LEFT_JOIN_DIS_PROFILE_QUERY,
+            (owner, owner,)
+        ).fetchall()
